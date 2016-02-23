@@ -2,9 +2,6 @@
 library("bitops")
 library("RCurl")
 library("jsonlite")
-library('GLMr')
-library("glmtools")
-library("jsonlite")
 library("GRAPLEr")
 
 graplerURL<-"http://graple.acis.ufl.edu"
