@@ -290,17 +290,43 @@ GrapleAbortExperiment <- function(submissionURL, experimentId)
 #' @description
 #' This function allows you to retrieve list of all the post-process operation scripts
 #' @param submissionURL URL:Port of the GRAPLEr web service
-#' @return a comma seperated
-#' @keywords Graple GetPPOLibrary
+#' @return a comma seperated string of file names
+#' @keywords Graple ListFilters
 #' @export
 #' @examples
 #' \dontrun{
 #' graplerURL<-"http://graple-service.cloudapp.net"
-#' GrapleGetPPOLibrary(graplerURL)
+#' GrapleListFilters(graplerURL)
 #' }
-GrapleGetPPOLibrary <- function(submissionURL)
+GrapleListFilters <- function(submissionURL)
 {
-  qurl <- paste(submissionURL, "GrapleGetPPOLibrary", sep="/")
+  qurl <- paste(submissionURL, "GrapleListFilters", sep="/")
   status <- getURL(qurl)
   return (toString(fromJSON(status)))
 }
+
+#' @title Checks version compatibility between R package and Graple web service
+#' @description
+#' This function allows you to check version compatibility between R package and
+#' Graple Web Service
+#' @param submissionURL URL:Port of the GRAPLEr web service
+#' @return true if versions are compatible else false
+#' @keywords Graple CheckVersionCompatibility
+#' @export
+#' @examples
+#' \dontrun{
+#' graplerURL<-"http://graple-service.cloudapp.net"
+#' GrapleCheckVersionCompatibility(graplerURL)
+#' }
+GrapleCheckVersionCompatibility <- function(submissionURL)
+{
+  compatibleVersions <- c(packageVersion("GRAPLEr"), "1.0.0")
+  qurl <- paste(submissionURL, "GrapleGetVersion", sep="/")
+  status <- getURL(qurl)
+  serviceVersion <- fromJSON(status)
+  if(serviceVersion %in% compatibleVersions)
+    return(TRUE)
+  else
+    return(TRUE)
+}
+

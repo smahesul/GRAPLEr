@@ -10,7 +10,9 @@ graplerURL<-"http://10.244.37.64:5000"
 print(GrapleCheckService(graplerURL))
 
 #Returns the list of post-processing scripts available on the server
-print(GrapleGetPPOLibrary(graplerURL))
+print(GrapleListFilters(graplerURL))
+
+print(GrapleCheckVersionCompatibility(graplerURL))
 
 #Experiment 1: Your own handcrafted simulations
 expRootDir<-"c:/ExpRoot/Exp1"
