@@ -155,7 +155,7 @@ GrapleRunExperimentSweep <- function(submissionURL, simDir, driverFileName, para
   qurl <- paste(submissionURL, "GrapleRunMetOffset", sep="/")
 
   status <- postForm(qurl, files=fileUpload(tarfile))
-  print(fromJSON(status))
+  print(status)
   expid <- substr(status[1], start=13, stop=52)
 
   if (file.exists(tarfile)) file.remove(tarfile)
@@ -168,7 +168,7 @@ GrapleRunExperimentSweep <- function(submissionURL, simDir, driverFileName, para
   qurl <- paste(submissionURL, "TriggerSimulation", params, sep="/")
   print(qurl)
   status = postForm(qurl, t="none")
-  print(paste0("Status:", fromJSON(status)))
+  print(paste0("Status:", status))
   #if(status <> "Success") print("Failed to start experiment")
   setwd(td)
   return (expid)
@@ -178,8 +178,8 @@ GrapleRunExperimentSweep <- function(submissionURL, simDir, driverFileName, para
 #' @description
 #' This function allows you to run an experiment using a single simulation.
 #' Create an archive that contains:
-#' 1. data csv file.
-#' 2. .nml file
+#' 1. Met (csv) file.
+#' 2. Driver (nml) file
 #' 3. job_desc.csv file (the name has to be job_desc.csv)
 #' 4. (optional) A FilterParams Directory, which consists of a "FilterParams.txt" file
 #'
@@ -221,11 +221,8 @@ GrapleRunExperimentJob <- function(submissionURL, simDir, FilterName)
   status <- postForm(qurl, files=fileUpload(tarfile))
   if (file.exists(tarfile)) file.remove(tarfile)
   unlink("../tempGRAPLE", recursive = TRUE)
-
-  print(fromJSON(status))
-
-  pid <- substr(status[1], start=57, stop=96)
-setwd(td)
+  expid <- substr(status[1], start=57, stop=96)
+  setwd(td)
   return (expid)
 }
 
@@ -287,4 +284,23 @@ GrapleAbortExperiment <- function(submissionURL, experimentId)
   qurl <- paste(submissionURL, "GrapleAbort", experimentId, sep="/")
   status<- getURL(qurl)
   return (fromJSON(status))
+}
+
+#' @title Retrieves the list of post process operation scripts
+#' @description
+#' This function allows you to retrieve list of all the post-process operation scripts
+#' @param submissionURL URL:Port of the GRAPLEr web service
+#' @return a comma seperated
+#' @keywords Graple GetPPOLibrary
+#' @export
+#' @examples
+#' \dontrun{
+#' graplerURL<-"http://graple-service.cloudapp.net"
+#' GrapleGetPPOLibrary(graplerURL)
+#' }
+GrapleGetPPOLibrary <- function(submissionURL)
+{
+  qurl <- paste(submissionURL, "GrapleGetPPOLibrary", sep="/")
+  status <- getURL(qurl)
+  return (toString(fromJSON(status)))
 }
